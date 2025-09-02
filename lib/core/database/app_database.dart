@@ -64,5 +64,4 @@ class AppDatabase {
     }
     await db_instance!.close();
     }
-
 }
