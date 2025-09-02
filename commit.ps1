@@ -2,11 +2,19 @@
 Clear-Host
 
 # Rodar flutter test
-Write-Host "Rodando testes com Flutter..." -ForegroundColor Cyan
-flutter test
+Write-Host "Rodando testes com Flutter..." -ForegroundColor Blue
+$testSuccess = $false
 
-# Verificar status dos testes
-if ($LASTEXITCODE -eq 0) {
+try {
+    flutter test
+    if ($LASTEXITCODE -eq 0) {
+        $testSuccess = $true
+    }
+} catch {
+    Write-Host "Não foi possível rodar os testes, mas o script continuará..." -ForegroundColor Yellow
+}
+
+if ($testSuccess) {
     Clear-Host
     Write-Host "==================================" -ForegroundColor DarkGreen
     Write-Host "    TODOS OS TESTES PASSARAM! " -ForegroundColor Green
@@ -34,9 +42,8 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host (CenterText "Mensagem" $width) -ForegroundColor Yellow
     Write-Host (CenterText $commitMessage $width) -ForegroundColor White
     Write-Host ("=" * $width) -ForegroundColor DarkCyan
-}
-else {
+} else {
     Write-Host "==================================" -ForegroundColor DarkRed
-    Write-Host "  Testes falharam. Commit cancelado. " -ForegroundColor Red
+    Write-Host "  Testes falharam ou não rodaram. Commit cancelado. " -ForegroundColor Red
     Write-Host "==================================" -ForegroundColor DarkRed
 }
